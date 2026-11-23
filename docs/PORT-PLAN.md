@@ -78,7 +78,9 @@ Every `js/` file, and where it goes. "This milestone" means it is in the Godot b
 
 ### Rendering (`js/render`)
 
-The browser renderer is three.js. This milestone draws with Godot primitives: a sphere per body in that body's colour, a translucent atmosphere shell, a directional light, a starfield, and a mesh per part (cylinder for stack parts, box for radial parts, a flame cone on a burning engine). `media/` images are not rebaked.
+The browser renderer is three.js. This milestone draws with Godot primitives: a sphere for the current body, a translucent atmosphere shell, a directional light, a starfield, and a mesh per part (cylinder for stack parts, box for radial parts, a flame cone on a burning engine). `media/` images are not rebaked.
+
+The flight camera is the only `Camera3D`. It is not current on the title screen or the craft picker, so those screens are the 2D layer (an opaque panel, then the menu). In flight the camera is perspective, near 0.5, far 100,000, field of view 70°. The craft stays at the origin. Bodies are placed by `RenderCamera.PlaceBody` so their centre and radius stay inside that far plane. `LookAt` uses an up vector that is not parallel to the view direction (on the pad, world up and the chase view are the same axis).
 
 | JavaScript | Later C# / scene |
 |---|---|

@@ -35,7 +35,7 @@ public partial class AppRoot : Node
         view.AddChild(_flight);
         _flight.Visible = false;
 
-        _ui = new CanvasLayer { Name = "UI" };
+        _ui = new CanvasLayer { Name = "UI", Layer = 20 };
         AddChild(_ui);
         ShowTitle();
     }
@@ -171,7 +171,7 @@ public partial class AppRoot : Node
     {
         _inFlight = false;
         _paused = false;
-        if (_flight != null) _flight.Visible = false;
+        _flight?.SetLive(false);
         _synth?.SetEngine(0, 0);
         var root = NewScreen();
         root.AddChild(Backdrop());
@@ -225,8 +225,8 @@ public partial class AppRoot : Node
         _world.Launch(craft, crew);
         _flight!.Sim = _world;
         _flight.ForgetCraft();
-        _flight.Visible = true;
         _flight.chase = true;
+        _flight.SetLive(true);
         _inFlight = true;
         _paused = false;
         _status = craft.name + " is on the pad. Z, then Space.";
@@ -236,7 +236,7 @@ public partial class AppRoot : Node
 
     void ShowHud()
     {
-        var root = NewScreen();
+        var root = NewScreen(opaque: false);
         root.MouseFilter = Control.MouseFilterEnum.Ignore;
         var top = new Label();
         top.SetAnchorsPreset(Control.LayoutPreset.TopWide);
@@ -374,7 +374,7 @@ public partial class AppRoot : Node
         }
         _flight!.Sim = _world;
         _flight.ForgetCraft();
-        _flight.Visible = true;
+        _flight.SetLive(true);
         _inFlight = true;
         _paused = false;
         _status = "Loaded.";
@@ -399,13 +399,24 @@ public partial class AppRoot : Node
         cf.Save(SettingsPath);
     }
 
-    Control NewScreen()
+    Control NewScreen(bool opaque = true)
     {
         _screen?.QueueFree();
         _screen = new Control { Name = "Screen" };
         _screen.SetAnchorsPreset(Control.LayoutPreset.FullRect);
-        _screen.MouseFilter = Control.MouseFilterEnum.Stop;
+        _screen.MouseFilter = opaque ? Control.MouseFilterEnum.Stop : Control.MouseFilterEnum.Ignore;
         _ui!.AddChild(_screen);
+        if (opaque)
+        {
+            var bg = new ColorRect
+            {
+                Color = new Color("0b0f14"),
+                MouseFilter = Control.MouseFilterEnum.Ignore,
+                Name = "BackdropColor",
+            };
+            bg.SetAnchorsPreset(Control.LayoutPreset.FullRect);
+            _screen.AddChild(bg);
+        }
         return _screen;
     }
 

@@ -13,7 +13,8 @@ Branch: `csharp-port`. Do not push to `main`. The pull request is a draft until 
   - Audio: procedural engine, pad, and one-shots. The repo has no sound files.
   - Menus: title, stock-rocket picker, About (original text plus a port section), settings, pause.
   - Save: `user://starwright-flight.json`.
-- xUnit: 17 tests, all passing. `dotnet build` of `godot/Starwright.csproj` succeeds on Godot.NET.Sdk 4.7.2. A headless Godot 4.7.2 .NET boot of the project exits cleanly.
+- xUnit: 20 tests, all passing. `dotnet build` of `godot/Starwright.csproj` succeeds on Godot.NET.Sdk 4.7.2 with 0 warnings.
+- Camera fix: the flight camera is perspective with near 0.5 and far 100,000, aimed with an up vector that is not parallel to the view, and it is current only during flight. Bodies are scaled into that range. Headless Godot 4.7.2 on `scenes/main.tscn` and `scenes/flight_check.tscn` logs no `create_frustum_points` errors. Hopper I and Skylark II both print `CAMERA_OK`.
 
 ## Files
 
@@ -21,7 +22,8 @@ Branch: `csharp-port`. Do not push to `main`. The pull request is a draft until 
 - `godot/` the Godot 4.7.2 C# project
 - `godot/src/Starwright.Core/` the simulation
 - `godot/src/Starwright.Core.Tests/` the xUnit suite
-- `godot/scripts/AppRoot.cs`, `FlightView.cs`, `Synth.cs`
+- `godot/scripts/AppRoot.cs`, `FlightView.cs`, `Synth.cs`, `FlightCheck.cs`
+- `godot/src/Starwright.Core/RenderCamera.cs` camera and body placement used by the view and the tests
 - `tools/export-catalog.mjs` regenerates `parts.json` and `stock-crafts.json`
 
 The browser game is untouched apart from `.gitignore` entries for `bin/`, `obj/`, and `.godot/`.
