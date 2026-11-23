@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Starwright.Core</RootNamespace>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\parts.json" LogicalName="parts.json" />
+    <EmbeddedResource Include="Data\stock-crafts.json" LogicalName="stock-crafts.json" />
+  </ItemGroup>
+</Project>
